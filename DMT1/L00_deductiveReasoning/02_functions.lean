@@ -513,6 +513,21 @@ with the pattern first in line. If it matches then
 the term to the right of the => defines the result.
 @@@ -/
 
+def isEven (n: Nat) : Bool := n%2 == 0
+
+def compose {α β γ : Type} (f: α → β) (g : β → γ) :=
+  fun a => g (f a)
+
+def compose' {α β γ : Type} : (α → β) → (β → γ) → (α → γ)
+|f, g => (fun a => g (f a))
+
+
+def isEvLenStr' : String → Bool := compose String.length isEven
+
+#check Function.comp
+#eval compose String.length isEven "Hello"
+#eval (isEven ∘ String.length) "Hello"
+
 def myNeg (b : Bool) : Bool :=
 match b with
 | true => false
