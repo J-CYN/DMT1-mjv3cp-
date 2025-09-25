@@ -28,7 +28,7 @@ squared.
 @@@ -/
 
 def square : Nat → Nat :=
-  sorry
+  λ x => x^2
 
 /- @@@
 #1 [5 points].
@@ -48,7 +48,7 @@ applied to the same value. The result
 should be the same.
 @@@ -/
 
-#eval (λ (n : Nat) => n^2) 5
+#eval (λ (n : Nat) => (n^2)) 5
 
 /- @@@
 #3 [5 points].
@@ -64,6 +64,8 @@ square.
 def square' : Nat → Nat :=
 λ y => y^2
 
+#eval square' 5
+
 /- @@@
 #4 [5 points].
 
@@ -71,7 +73,9 @@ Under what specific circumstance would
 it be wrong to use α (alpha) conversion
 to rename an argument, *x*, to *y*? Why?
 
-Answer here:
+Answer here: We can only really use different symbols
+that haven't been utilized in other areas within the scope. Or if they
+pertain to a global variable/function such as the key word def.
 
 ANSWER: If the variable *y* already has
 a meaning in the application term. The new
@@ -104,7 +108,7 @@ syntax that we've used to define *add*.
 @@@ -/
 
 def prAdd : Nat → Nat
-| n2 => 2 + n2
+| n2 => n2 + 2
 
 /- @@@
 #5 [5 points].
@@ -116,8 +120,7 @@ replacing the *sorry* with your answer.
 
 def M : Nat → Nat → Nat := fun x y => x * y
 
-def M' : Nat → Nat :=
-  sorry
+def M' : Nat → Nat := fun y => M 2 y
 
 /- @@@
 #6 [10 points].
@@ -143,15 +146,16 @@ should be 2 * 3 = 6.
 - next test that the applicatiuon, *apply add 2 3,* returns 5
 @@@ -/
 
+def apply : (Nat → Nat → Nat) → Nat → Nat → Nat
+| f, x, y => f x y
 
+#eval apply (fun x y => x + y) 2 3
 /- @@@
 #7 [10 points].
 
 Use #eval to the application, *apply (_) 2 3*, where _ is
 replaced with a lambda abstraction for Nat multiplication.
 @@@ -/
-def apply : (Nat → Nat → Nat) → Nat → Nat → Nat
-| f, x, y => f x y
 
 #eval apply (fun x y => x * y) 2 3
 
@@ -166,8 +170,8 @@ few times to evaluate the result of applying *add3* to
 a few different inputs.
 @@@ -/
 
-def addNfn : Nat → (Nat → Nat)
-| n => λ m => n + m
+def addNfn : Nat → Nat → Nat
+| n, m => n + m
 
 def add3 := addNfn 3
 
@@ -192,7 +196,7 @@ where _ is a Type value, such as Nat or Bool. What
 is the type of this function? Hint: #check (idType).
 Include the parentheses.
 
-Answer here:
+Answer here: Type → Type
 
 ANSWER: Type → Type
 @@@ -/
@@ -216,7 +220,7 @@ different Type values (Nat, String, Bool) for α.
 
 What's the type of this function?
 
-Answer:
+Answer: (α : Type) → α → α
 
 ANSWER: (α : Type) → α → α
 @@@ -/
@@ -242,7 +246,7 @@ inferred by Lean. Use *#check idPoly'* to see
 the answer to this question: What is the type
 of this function, written using → notation?
 
-Answer here:
+Answer here: (α : Type) → α → α
 
 ANSWER: (α : Type) → α → α
 
