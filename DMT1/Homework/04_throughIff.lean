@@ -8,9 +8,21 @@ true, then it must be that X ↔ Y is as well.
 Call your theorem andImpEquiv.
 @@@ -/
 
+--Left and right don't work without it for some strange reason
 
 -- ANSWER
+/-
+This didn't work for some reason, so I wrote it another way as well
 
+theorem andImpEquiv (P Q: Prop) : (P ∧ Q) → P ↔ Q :=
+  fun (pq: P ∧ Q) =>
+    let PipQ := fun(p : P) => pq.right
+    let QipP := fun(q : Q) => pq.left
+    Iff.intro PipQ QipP
+-/
+
+theorem andImpEquiv (P Q : Prop) (pq : P ∧ Q) : P ↔ Q :=
+  Iff.intro (fun p => pq.right) (fun q => pq.left)
 
 /- @@@
 #2: Give the proof in #1 in English. To do this,
@@ -19,6 +31,14 @@ use at each step and what inference rules you use
 to make progress at each step. We get you started:
 
 -- ANSWER
+
+So the defined theorem proposes that when given a proof of P ∧ Q which is pq,
+in which P and Q are propositions, by applying a function in which we
+provide a proof of P and know a proof of pq(a proof of P ∧ Q) then we
+can create a proof that Q is true, and the same for a proof of pq and Q to create a proof of P.
+So using the functions that make this process possible we can use Iff.intro and these two functions to prove that if one is true,
+the other is also true assuming our provided proofs.
+
 Proof: To prove this *implication* we'll use the
 introduction rule for →. So *assume* the premise
 is true. What remains to be proved is that, in this
@@ -48,8 +68,10 @@ case (here involving X and Y) of the general claim.
 @@@ -/
 
 -- Answer
-
-
+axiom X: Prop
+axiom Y: Prop
+axiom xy: X ∧ Y
+#check andImpEquiv X Y xy
 
 /- @@@
 #4: Something About False
@@ -93,15 +115,24 @@ definition.
 @@@ -/
 
 -- ANSWER
+def exFalsoK (K : Prop) : False → K :=
+  False.elim
 
+
+def exFalsoK' (K : Prop) : False → K :=
+  fun f => nomatch f
 
 /- @@@
 Why is it safe to accept tihs definition? What do we
 know that's special about *exFalsoK* that makes it ok?
 
 ANSWER:
-
-
+It is safe to accept this definition because we've gotten to a point that should
+be impossible in reasoning. The very things we assume as our parameters make sure
+that there is no valid way to get to this point. A proof of false is impossible
+so if we have one, something wrong has occurred and we are no longer in
+as valid nor possible context we basically just "bail out" and say it's true as
+this context is once again, not possible and therefore doesn't really matter.
 @@@ -/
 
 
@@ -112,7 +143,8 @@ P implies Q.
 @@@-/
 
 -- ANSWER
-
+def False_P_IMP_Q (P Q: Prop) : P ∧ False → Q :=
+  fun(P_False) => nomatch P_False.right
 
 /- @@@
 Write a short paragraph stating the proposition to be
@@ -120,12 +152,27 @@ proved and the proof of it -- in English.
 @@@ -/
 
 -- ANSWER
-
+/-We are trying to prove that False and P implies Q
+We assumed P and Q are arbitrary Props
+And we are trying to prove that when given a Proposition of P and False
+that we can derive a proof of Q from it. Since a proof of P ∧ False would require
+a proof of that would require both a proof of P and a proof of False, it is impossible to
+get to this stage of a proof. It is almost impossible. So we can break the and apart and grab the proof of False
+from the P ∧ False proposition and use nomatch on it to get out of the proof.
+-/
 
 /- @@@
 #6 State and prove the proposition that False → False.
 Give both formal and English (natural language) proofs.
 @@@ -/
 
+def False_False : False → False :=
+  fun(Input_False) => nomatch Input_False
 
 -- ANSWER
+
+/-
+If given a proof of False, we can return a proof of False. In reality this is just
+an identity property, so lean can prove this rather easily. As a function that just
+takes it's proof of False input and applies no match to it to quickly by pass the proof.
+-/
