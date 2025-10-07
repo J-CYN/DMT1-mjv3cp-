@@ -1,4 +1,14 @@
 /- @@@
+To prepare for this homework (1) be sure you
+have read and understood the class materials
+through 05_or.lean, corresponding to the "Or"
+section in the online notes. (2) Refer to the
+inference rules cheat sheet linked at the bottom
+of the web site.
+@@@ -/
+
+
+/- @@@
 #1. Suppose P and Q are any propositions.
 
 #1.A: State and prove the conjecture that,
@@ -10,9 +20,13 @@ Call your theorem andImpEquiv.
 
 --Left and right don't work without it for some strange reason
 
+
 -- ANSWER
 /-
 This didn't work for some reason, so I wrote it another way as well
+
+-- ANSWER (Formal proof in Lean)
+
 
 theorem andImpEquiv (P Q: Prop) : (P ∧ Q) → P ↔ Q :=
   fun (pq: P ∧ Q) =>
@@ -25,7 +39,7 @@ theorem andImpEquiv (P Q : Prop) (pq : P ∧ Q) : P ↔ Q :=
   Iff.intro (fun p => pq.right) (fun q => pq.left)
 
 /- @@@
-#2: Give the proof in #1 in English. To do this,
+#2: Give the proof for #1 in English. To do this,
 just explain clearly what assumptions you make or
 use at each step and what inference rules you use
 to make progress at each step. We get you started:
@@ -39,14 +53,18 @@ can create a proof that Q is true, and the same for a proof of pq and Q to creat
 So using the functions that make this process possible we can use Iff.intro and these two functions to prove that if one is true,
 the other is also true assuming our provided proofs.
 
+-- PARTIAL ANSWER, YOU COMPLETE IT
+
+
 Proof: To prove this *implication* we'll use the
 introduction rule for →. So *assume* the premise
-is true. What remains to be proved is that, in this
-context,  and we will then show that, in that
-context, the conclusion must be true as well. So
-assume P ∧ Q is true. The conclusion to be proved
-is an equivalence. To prove an equivalence we need
-to prove both ...
+is true. What remains to be proved is that, in
+this context,  the conclusion must be true as well.
+So assume P ∧ Q is true.
+
+What now remains to be proved is an equivalence,
+namely _____. To prove an equivalence we need to
+prove both ... and ... To prove ...
 @@@ -/
 
 
@@ -61,13 +79,15 @@ Once you've done that, in a #check command, apply
 the general theorem we just proved to prove that X
 is equivalent to Y.
 
-Do not just copy the proof. The whole point is to
-reinforce the idea that one you've proved a theorem
-you can use it (by applying it) to prove any special
-case (here involving X and Y) of the general claim.
+Use this example to help you see that once you've
+proved a theorem (as in #1 above) you can use it by
+applying it to prove any special case, here with X
+and Y in place of the formal parameters in the
+statement of the theorem itself.
 @@@ -/
 
 -- Answer
+
 axiom X: Prop
 axiom Y: Prop
 axiom xy: X ∧ Y
