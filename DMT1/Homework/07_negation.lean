@@ -111,8 +111,10 @@ theorem notDistribOverAnd {P Q : Prop} : ¬(P ∧ Q) → (¬P ∨ ¬Q)
     )
   )
 
+
 --This variant is not logically provable. We need a function of P → False or Q → False to use with Or.inl or Or.inr, without it we don't have the building blocks to do much.
 --Getting to proving ¬P ∨ ¬Q requires us to derive each part and that isn't possible without more pieces.
+
 /- @@@
 #2
 
@@ -147,6 +149,7 @@ fun h => match h with
         nomatch (nq pq.right)
       )
     )
+
 
 /- @@@
 #3
