@@ -38,10 +38,37 @@ theorem demorgan_or_iff {P Q : Prop} : ¬(P ∨ Q) ↔ (¬P ∧ ¬Q) :=
 -- One direction is constructively valid
 
 theorem demorgan_or_neg_to_neg_and {P Q : Prop} : (¬P ∨ ¬Q) → ¬(P ∧ Q) :=
-  fun h ⟨hp, hq⟩ => h.elim (fun hnp => hnp hp) (fun hnq => hnq hq)
+  (
+    fun h =>
+      (
+        fun pandq =>
+        (
+          Or.elim h
+          (
+            fun np => np pandq.left
+          )
+          (
+            fun nq => nq pandq.right
+          )
+        )
+      )
+  )
+  -- fun h ⟨hp, hq⟩ => h.elim (fun hnp => hnp hp) (fun hnq => hnq hq)
 
 -- The other direction is NOT constructively valid!
 -- We cannot prove: ¬(P ∧ Q) → (¬P ∨ ¬Q)
+
+theorem foo {P Q: Prop} : ¬(P ∧ Q) → (¬ P ∨ ¬ Q) :=
+  fun h =>
+  (
+    Or.inl
+    (
+      fun p => _
+    )
+  )
+  (
+    _
+  )
 
 /- @@@ ## Why It Fails Constructively @@@ -/
 
@@ -59,6 +86,15 @@ theorem demorgan_or_neg_to_neg_and {P Q : Prop} : (¬P ∨ ¬Q) → ¬(P ∧ Q) 
 /- @@@ ## Provable Variants @@@ -/
 
 -- We CAN prove the double negation version:
+
+theorem negElim {P : Prop} : ¬¬P → P :=
+(
+  fun h=>
+    (
+      _
+    )
+)
+
 theorem demorgan_double_neg {P Q : Prop} : ¬(P ∧ Q) → ¬¬(¬P ∨ ¬Q) :=
   fun hnpq hnnpnq =>
     hnnpnq (Or.inl (fun hp =>
