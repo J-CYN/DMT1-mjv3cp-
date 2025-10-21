@@ -161,6 +161,28 @@ example { P Q : Prop } : ¬(P ∧ Q) → ¬P ∨ ¬Q :=
   | Or.inr np => Or.inl np          -- ¬P true (easy, Q irrelevant)
 )
 
+example : ∀ P, ¬P ↔ P → False :=
+  fun (P : Prop) =>
+  (
+    Iff.intro
+    (
+      fun np =>
+        fun p:P =>
+          np p
+    )
+    (
+      fun pimpf => pimpf
+    )
+  )
+
+example: (∀ P, P ∨ ¬P) → (∀ P, ¬¬P → P) :=
+  fun em =>
+    fun P =>
+      fun nnp =>
+        let pornp := em P
+        match pornp with
+        | Or.inl p => p
+        | Or.inr np => nomatch nnp np
 /- @@@
 Here's a variant of the precising reasoning that's
 fully responsive to the homework assignment: to show
