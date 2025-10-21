@@ -54,11 +54,11 @@ is required to construct a proof of ¬P ∨ ¬Q.
 Uncomment the following code to explore it.
 @@@ -/
 
--- example { P Q : Prop } : ¬(P ∧ Q) → ¬P ∨ ¬ Q :=
--- (
---   fun (h : ¬(P ∧ Q)) =>
---     Or.inl _
--- )
+example { P Q : Prop } : ¬(P ∧ Q) → ¬P ∨ ¬ Q :=
+(
+  fun (h : ¬(P ∧ Q)) =>
+    Or.inl _
+)
 
 
 /- @@@
@@ -203,8 +203,31 @@ this principle is valid in Lean 4. You won't be
 able to. Understand where you got stuck. Leave
 you incomplete proof commented out with a quick
 comment explaining exactly why you get stuck.
+@@@ -/
 
+def attempt {P: Prop}: ¬¬P → P :=
+  (
+    fun h =>
+    (
+      _
+    )
+  )
+
+/- @@@
 #2. Provide that if you accept (assume) the axiom
 of the excluded middle, then negation elimination
 is valid.
+
+axiom em : ∀ P : Prop, P ∨ ¬P
 @@@ -/
+
+def negelim {P: Prop}: ¬¬P → P :=
+  (
+    fun h =>
+      (
+        let PorNP := (em P)
+        match PorNP with
+        | Or.inl p => p
+        | Or.inr np => nomatch h np
+      )
+  )
