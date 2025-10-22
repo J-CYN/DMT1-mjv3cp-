@@ -236,8 +236,11 @@ def assoc {P Q R: Prop} : (P ∨ Q) ∨ R → P ∨ (Q ∨ R) :=
   fun h =>
   (
     match h with
-    | _
-    | _
+    | Or.inl porq =>
+      match porq with
+      | Or.inl p => Or.inl p
+      | Or.inr q => Or.inr (Or.inl q)
+    | Or.inr r => Or.inr (Or.inr r)
   )
 )
 
@@ -259,3 +262,20 @@ This what we mean by *multiplication distributes over addition.*
 In logic we mean A ∧ (B ∨ C) ↔ (A ∧ B) ∨ (A ∧ C). Formally state
 and prove this equivalence.
 @@@ -/
+
+def dist {A B C: Prop} : A ∧ (B ∨ C) ↔ (A ∧ B) ∨ (A ∧ C) :=
+  Iff.intro
+  (
+    fun h =>
+      let a := h.left
+      let bc := h.right
+      match bc with
+      | Or.inl b => Or.inl (And.intro a b)
+      | Or.inr c => Or.inr (And.intro a c)
+  )
+  (
+    fun h =>
+      match h with
+      | Or.inl ab => And.intro ab.left (Or.inl ab.right)
+      | Or.inr ac => And.intro ac.left (Or.inr ac.right)
+  )

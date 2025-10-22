@@ -66,13 +66,14 @@ the proof state at the point where you need to finish
 the proof.
 @@@ -/
 
--- example (K Z : Prop) (h : K → False) (k : K) : Z :=
--- (
---   _
--- )
+example (K Z : Prop) (h : K → False) (k : K) : Z :=
+(
+  nomatch h k
+)
 
 
 /- @@@
+
 #5 In Lean, state and prove the proposition that if
 P and Q are aribtrary propositions then False *and*
 P implies Q.
@@ -80,7 +81,9 @@ P implies Q.
 
 -- ANSWER
 
-
+example {P Q: Prop} : (False ∧ P) → Q :=
+  fun h =>
+    nomatch h.left
 
 /- @@@
 #6 State and prove the proposition that False → False.
@@ -90,19 +93,34 @@ Give both formal and English (natural language) proofs.
 
 -- ANSWER
 
+def fal : False → False :=
+  fun h => h
 
 /- @@@
 #7 State and prove the proposition that, if P and Q are
 arbitrary propositions, then (P ∧ Q) ∧ (Q → False) → P
 @@@ -/
 
-
+def arbit {P Q: Prop} : (P ∧ Q) ∧ (Q → False) → P :=
+  (
+    fun h =>
+      let le := h.left
+      let l := le.left
+      l
+  )
 
 /- @@@
 #8 Prove the following: (P ∨ Q) ∧ (Q → False) → P
 @@@ -/
 
--- example (P Q : Prop) : (P ∨ Q) ∧ (Q → False) → P :=
--- (
---   _
--- )
+example (P Q : Prop) : (P ∨ Q) ∧ (Q → False) → P :=
+(
+  fun h =>
+  (
+    let le := h.left
+    let re := h.right
+    match le with
+    | Or.inl p => p
+    | Or.inr q => nomatch re q
+  )
+)
