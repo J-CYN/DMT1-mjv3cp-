@@ -213,14 +213,31 @@ theorem orComm (P Q : Prop) : (P ∨ Q) ↔ (Q ∨ P) :=
     -- assume P ∨ Q
     fun porq =>
     (
+      match porq with
+      | Or.inl p => Or.inr p
+      | Or.inr q => Or.inl q
       -- show Q ∨ P
-      _
     )
   )
   -- backward proof: show (Q ∨ P) → (P ∨ Q)
   (
     -- you do the rest
-    _
+    fun qorp =>
+    (
+      match qorp with
+      | Or.inl q => Or.inr q
+      | Or.inr p => Or.inl p
+    )
+  )
+)
+
+def assoc {P Q R: Prop} : (P ∨ Q) ∨ R → P ∨ (Q ∨ R) :=
+(
+  fun h =>
+  (
+    match h with
+    | _
+    | _
   )
 )
 
@@ -232,6 +249,8 @@ then do we know P ∨ R for sure? If so prove it, if not in English
 just give a counterexample: What's a situation where the premises
 of this implication are true but the conclusion is false. You can
 just argue here in terms of truth values.
+
+What if Q is only true
 
 Exercise #4: Formally state and prove the following conjecture:
 ∧ distributes over ∨. This is like saying * distributes over +
