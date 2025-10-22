@@ -183,6 +183,21 @@ example: (∀ P, P ∨ ¬P) → (∀ P, ¬¬P → P) :=
         match pornp with
         | Or.inl p => p
         | Or.inr np => nomatch nnp np
+
+example: (∀ P, P ∨ ¬P) ↔ (∀ P, ¬¬P → P) :=
+  Iff.intro
+  (
+    fun em =>
+      fun P =>
+        fun nnp =>
+          let pornp := em P
+          match pornp with
+          | Or.inl p => p
+          | Or.inr np => nomatch nnp np
+  )
+  (
+    _
+  )
 /- @@@
 Here's a variant of the precising reasoning that's
 fully responsive to the homework assignment: to show
