@@ -60,13 +60,29 @@ truth tables are NOT required here.
 
 - A. (P → Q) → (Q → P)
 
+NOT VALID
+
+If P is true, Q must be true, but Q could be set to true by multiple different conditions, and P is not reliant of Q.
+Like if the sprinkler is on and the ground is then wet, it doesn't mean "the ground is wet has to mean that the sprinkler is on" there could be many reasons the ground is wet.
+
 - B. (¬Q → ¬P) → (P → Q)
+
+VALID
 
 - C. ¬(P ∧ Q) → ¬Q ∨ ¬P
 
+VALID
+
 - D. (P ∧ Q) → (P ∨ Q)
 
+NOT VALID(I THINK)
+
+
 - E. (P ∨ Q) → (P ∧ Q)
+
+NOT VALID
+
+What if P is true but Q is not true, the first equation would be true, but not the second.
 
 
 ## 2. Proof-Based Reasoning [20 points each = 60 points]
