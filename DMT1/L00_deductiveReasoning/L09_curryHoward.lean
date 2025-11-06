@@ -195,11 +195,11 @@ Boolean and that it has to return a Nat: let's
 say 0 if the argument is a string and 1 if it's
 a Boolean. Here you go.
 @@@ -/
-def either : String ⊕ Bool → Nat :=
+def either : String ⊕ Bool → String :=
   fun sorb =>
     match sorb with
-    | Sum.inl s => 0
-    | Sum.inr b => 1
+    | Sum.inl s => "string"
+    | Sum.inr b => "bool"
 
 #eval either (Sum.inl "Hi")
 #eval either (Sum.inr false)
@@ -217,6 +217,15 @@ fun h : String ⊕ Bool =>
   match h with
   | Sum.inl s => Sum.inr s
   | Sum.inr b => Sum.inl b
+
+def sum_assoc: (String ⊕ Bool ⊕ Nat) → ((String ⊕ Bool) ⊕ Nat) :=
+  fun h =>
+    match h with
+    | Sum.inl s => Sum.inl (Sum.inl s)
+    | Sum.inr bn =>
+      match bn with
+      |Sum.inl b => Sum.inl (Sum.inr b)
+      |Sum.inr n => Sum.inr n
 
 
 /- @@@
@@ -243,9 +252,70 @@ example {α β γ : Type} : (α ⊕ β) ⊕ γ → α ⊕ (β ⊕ γ) :=
 ## What About Not?
 @@@ -/
 
+def Ng a := a → Empty
+
+example {α β: Type}: α × β → α ⊕ β :=
+  fun (a,b) => Sum.inl a
+
+
+
+example {α β: Type}: α ⊕ β → α × β :=
+fun h =>
+  match h with
+  | Sum.inl a => _
+  | Sum.inr b => _
+
+
+inductive Meat : Type
+| chicken
+| beef
+
+inductive Cheese : Type
+| chedder
+| gruyere
+
+inductive Bread : Type
+| wheat
+| rye
+
+def bmc: Bread × (Meat ⊕ Cheese) → Bread × (Cheese ⊕ Meat) :=
+  fun (b, mc) => (b, match mc with
+                      | Sum.inl m => Sum.inr m
+                      | Sum.inr c => Sum.inl c)
+
+example : Bread × (Meat ⊕ Cheese) → (Bread × Meat) ⊕ (Bread × Cheese) :=
+fun h =>
+  let b := h.fst
+  let mc := h.snd
+  match mc with
+  | Sum.inl m => Sum.inl (b, m)
+  | Sum.inr c => Sum.inr (b, c)
+
+
 /- @@@
 ## Equality!
 @@@ -/
+
+inductive Person
+| Kevin
+| Bill
+| Mary
+
+inductive KevinUVA : Prop
+| idCard
+
+inductive IsNice : Person → Prop
+| maryNice : IsNice Mary
+| billNice : IsNice Bill
+
+def isEven: Nat → Prop := fun n => n % 2 = 0
+
+example : isEven 4 := rfl
+
+inductive WorksAtUVA : Person → Prop
+
+example : KevinUVA := KevinUVA.idCard
+example : 3 = 3 := Eq.refl 3
 
 theorem t1 : 2 = 1 + 1 := rfl
 theorem t2 : 5 + 2 = 7 := rfl
