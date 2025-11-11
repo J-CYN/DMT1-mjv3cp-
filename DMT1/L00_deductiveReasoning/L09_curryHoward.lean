@@ -323,13 +323,12 @@ theorem t2 : 5 + 2 = 7 := rfl
 theorem t3 : (2 = 1 + 1) ∧ (5 + 2 = 7) :=
 And.intro (Eq.refl 2) rfl
 
+open Person
 
 inductive Person where
 | Mary
 | Xing
 | Tom
-
-open Person
 
 inductive Likes : Person → Person → Prop
 | mlm : Likes Mary Mary
@@ -340,7 +339,7 @@ open Likes
 -- Everyone likes Mary
 
 def likes : Person → Person → Prop := sorry
-
+/-
 example : ∀ (p : Person), Likes p Mary :=
   fun (x : Person) =>
   (
@@ -349,6 +348,62 @@ example : ∀ (p : Person), Likes p Mary :=
     | Xing => xlm
     | Tom => tlm
   )
+-/
 
+example {α β : Type} : α ⊕ β → α × β :=
+(
+  fun h => match h with
+  | Sum.inl a => _
+  | Sum.inr b => _
+)
+
+example : Nat ⊕ Bool → Nat × Bool :=
+(
+  fun h => match h with
+  | Sum.inl a => (a,true)
+  | Sum.inr b => (0,true)
+)
+
+example {α β : Type} : Ng (α ⊕ β → α × β) := _
 
 -- example : ∃ (p : Person), likes p Mary := _
+
+--#### Elimination
+
+#check (@Eq.subst)
+
+
+def isEven2: Nat → Prop := fun n => n%2 = 0
+
+example : (a b : Nat) → (ev: isEven2 a) → (eq : a = b) → isEven2 b :=
+(
+  fun a b =>
+  (
+    fun ev =>
+    (
+      fun eq =>
+      (
+        Eq.subst eq ev
+      )
+    )
+  )
+)
+
+example (α : Type) : ∀ (a: α), a = a :=
+  fun a => rfl
+
+example (α : Type) : ∀ (a b: α), a = b → b = a :=
+  fun a b =>
+  (
+    fun aeqb =>
+    (
+      by rw [aeqb]
+    )
+  )
+
+example {α: Type} : ∀ (a b c: α), a=b → b=c → a=c :=
+(
+  fun (a b c: Prop) =>
+    fun ab =>
+      fun bc => Eq.subst
+)
